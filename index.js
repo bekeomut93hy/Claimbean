@@ -228,7 +228,7 @@ async function addBeanLogs(time) {
           "12h": {},
         })
     );
-    fs.promises.writeFile("./beans-history.log", JSON.stringify(plannet));
+    await fs.promises.writeFile("./beans-history.log", JSON.stringify(plannet));
   }
 
   try {
