@@ -217,7 +217,7 @@ async function main() {
   await setup();
   console.log(clc.green("======== END SETUP ========"));
 
-  setInterval(() => {
+  setInterval(async () => {
     const d = new Date();
     console.log("Time run:", d);
 
