@@ -218,18 +218,18 @@ async function main() {
   console.log(clc.green("======== END SETUP ========"));
 
   setInterval(() => {
-    console.log(clc.green("======== START FARM EVERY 5 minutes ========"));
     const d = new Date();
     console.log("Time run:", d);
 
+    console.log(clc.green("======== START FARM EVERY 5 minutes ========"));
     await farm();
-
     console.log(clc.green("======== END FARM EVERY 5 minutes ========"));
   }, 5 * 60 * 1000 + 5000);
 
   const fightJob = new CronJob("0 9 * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
+
     console.log(
       clc.green("======== START FIGHT AT 09:00 AM every day ========")
     );
@@ -240,6 +240,7 @@ async function main() {
   const refreshDataJob = new CronJob("0 */6 * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
+
     console.log(
       clc.green("======== START REFRESH DATA EVERY 6 HOURS ========")
     );
