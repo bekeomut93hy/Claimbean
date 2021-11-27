@@ -293,33 +293,33 @@ async function main() {
     console.log(clc.green("======== END REFRESH DATA EVERY 6 HOURS ========"));
   }).start();
 
-  new CronJob("*/15 * * * *", async function () {
-    const d = new Date();
-    console.log("Time run:", d);
+  // new CronJob("*/15 * * * *", async function () {
+  //   const d = new Date();
+  //   console.log("Time run:", d);
 
-    await addBeanLogs("15m");
-  }).start();
+  //   await addBeanLogs("15m");
+  // }).start();
 
-  new CronJob("0 */2 * * *", async function () {
-    const d = new Date();
-    console.log("Time run:", d);
+  // new CronJob("0 */2 * * *", async function () {
+  //   const d = new Date();
+  //   console.log("Time run:", d);
 
-    await addBeanLogs("2h");
-  }).start();
+  //   await addBeanLogs("2h");
+  // }).start();
 
-  new CronJob("0 */6 * * *", async function () {
-    const d = new Date();
-    console.log("Time run:", d);
+  // new CronJob("0 */6 * * *", async function () {
+  //   const d = new Date();
+  //   console.log("Time run:", d);
 
-    await addBeanLogs("6h");
-  }).start();
+  //   await addBeanLogs("6h");
+  // }).start();
 
-  new CronJob("0 */12 * * *", async function () {
-    const d = new Date();
-    console.log("Time run:", d);
+  // new CronJob("0 */12 * * *", async function () {
+  //   const d = new Date();
+  //   console.log("Time run:", d);
 
-    await addBeanLogs("12h");
-  }).start();
+  //   await addBeanLogs("12h");
+  // }).start();
 }
 
 main();
