@@ -1,5 +1,7 @@
 require("dotenv").config();
+const fs = require("fs");
 const _ = require("lodash");
+const jwt_decode = require("jwt-decode");
 const CronJob = require("cron").CronJob;
 const clc = require("cli-color");
 const moment = require("moment");
@@ -11,7 +13,7 @@ const {
   getRequestsMine,
   mine,
   claim,
-  getOwnBean,
+  getOwnBeans,
   getCharacters,
   getRemainStaminaChar,
   getRemainReward,
@@ -89,7 +91,7 @@ async function farm() {
 
 async function eatBeans({ planet, charId, token }) {
   try {
-    const beansInfo = await retry(getOwnBean.bind(this, { planet, token }));
+    const beansInfo = await retry(getOwnBeans.bind(this, { planet, token }));
     let minimumBean = beansInfo.pop();
 
     while (minimumBean.quantity <= 0) {
@@ -212,6 +214,49 @@ async function fight() {
   }
 }
 
+async function addBeanLogs(time) {
+  try {
+    await fs.promises.access("./beans-history.log");
+  } catch (error) {
+    let plannet = {};
+    PLANETS.forEach(
+      (x) =>
+        (plannet[x] = {
+          "15m": {},
+          "2h": {},
+          "6h": {},
+          "12h": {},
+        })
+    );
+    fs.promises.writeFile("./beans-history.log", JSON.stringify(plannet));
+  }
+
+  try {
+    let logs = JSON.parse(
+      await fs.promises.readFile("./beans-history.log", {})
+    );
+
+    for (let planet of PLANETS) {
+      console.log(clc.blue(`========> START ADD LOG BEAN: ${planet}`));
+      await Promise.all(
+        accessTokens.map(async (token) => {
+          const deToken = jwt_decode(token);
+
+          logs[planet][time][deToken?.email] = await getOwnBeans({
+            planet,
+            token,
+          });
+        })
+      );
+      console.log(clc.blue(`========> END ADD LOG BEAN: ${planet}`));
+    }
+
+    await fs.promises.writeFile("./beans-history.log", JSON.stringify(logs));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function main() {
   console.log(clc.green("======== START SETUP ========"));
   await setup();
@@ -226,7 +271,7 @@ async function main() {
     console.log(clc.green("======== END FARM EVERY 5 minutes ========"));
   }, 5 * 60 * 1000 + 5000);
 
-  const fightJob = new CronJob("0 9 * * *", async function () {
+  new CronJob("0 9 * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
 
@@ -235,9 +280,9 @@ async function main() {
     );
     await fight();
     console.log(clc.green("======== END FIGHT AT 09:00 AM every day ========"));
-  });
+  }).start();
 
-  const refreshDataJob = new CronJob("0 */6 * * *", async function () {
+  new CronJob("0 */6 * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
 
@@ -246,10 +291,35 @@ async function main() {
     );
     await setup();
     console.log(clc.green("======== END REFRESH DATA EVERY 6 HOURS ========"));
-  });
+  }).start();
 
-  fightJob.start();
-  refreshDataJob.start();
+  new CronJob("*/15 * * * *", async function () {
+    const d = new Date();
+    console.log("Time run:", d);
+
+    await addBeanLogs("15m");
+  }).start();
+
+  new CronJob("0 */2 * * *", async function () {
+    const d = new Date();
+    console.log("Time run:", d);
+
+    await addBeanLogs("2h");
+  }).start();
+
+  new CronJob("0 */6 * * *", async function () {
+    const d = new Date();
+    console.log("Time run:", d);
+
+    await addBeanLogs("6h");
+  }).start();
+
+  new CronJob("0 */12 * * *", async function () {
+    const d = new Date();
+    console.log("Time run:", d);
+
+    await addBeanLogs("12h");
+  }).start();
 }
 
 main();

@@ -64,7 +64,7 @@ module.exports = {
       throw err;
     }
   },
-  getOwnBean: async ({ planet, whiteList, token }) => {
+  getOwnBeans: async ({ planet, token }) => {
     try {
       const itemResults = await request(`${BASE_URL}/items/mine`, {
         method: "GET",
@@ -114,6 +114,7 @@ module.exports = {
                 stamina: findItem?.stamina || 15,
                 quantity: item.quantity,
                 staminaFrom: findItem?.staminaFrom,
+                name: findItem?.name,
               };
             })
             .filter((x) => !(x?.staminaFrom < 0)),
