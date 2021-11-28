@@ -272,17 +272,17 @@ async function main() {
 
     console.log(clc.green("======== START FARM EVERY 5 minutes ========"));
     await farm();
-    await addBeanLogs("5m");
+    // await addBeanLogs("5m");
     console.log(clc.green("======== END FARM EVERY 5 minutes ========"));
   }, 5 * 60 * 1000 + 5000);
 
-  new CronJob("0 */3 * * *", async function () {
+  new CronJob("0 * * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
 
-    console.log(clc.green("======== START FIGHT EVERY 2 HOURS ========"));
+    console.log(clc.green("======== START FIGHT EVERY 1 HOURS ========"));
     await fight();
-    console.log(clc.green("======== END FIGHT EVERY 2 HOURS ========"));
+    console.log(clc.green("======== END FIGHT EVERY 1 HOURS ========"));
   }).start();
 
   new CronJob("0 */6 * * *", async function () {
