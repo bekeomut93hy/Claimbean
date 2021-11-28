@@ -270,16 +270,13 @@ async function main() {
     console.log(clc.green("======== END FARM EVERY 5 minutes ========"));
   }, 5 * 60 * 1000 + 5000);
 
-  // Follow utc time
-  new CronJob("0 3 * * *", async function () {
+  new CronJob("0 */3 * * *", async function () {
     const d = new Date();
     console.log("Time run:", d);
 
-    console.log(
-      clc.green("======== START FIGHT AT 03:00 AM every day ========")
-    );
+    console.log(clc.green("======== START FIGHT EVERY 2 HOURS ========"));
     await fight();
-    console.log(clc.green("======== END FIGHT AT 03:00 AM every day ========"));
+    console.log(clc.green("======== END FIGHT EVERY 2 HOURS ========"));
   }).start();
 
   new CronJob("0 */6 * * *", async function () {
