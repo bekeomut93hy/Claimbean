@@ -5,7 +5,7 @@ const jwt_decode = require("jwt-decode");
 const CronJob = require("cron").CronJob;
 const clc = require("cli-color");
 const moment = require("moment");
-const { ACCOUNTS, BEANS_WHITELIST, PLANETS } = require("./const");
+const { ACCOUNTS, BEANS_WHITELIST, PLANETS, APP_ID } = require("./const");
 const { retry, sleep } = require("./helpers");
 const {
   login,
@@ -216,15 +216,18 @@ async function fight() {
 
 async function addBeanLogs(time) {
   try {
-    await fs.promises.access("./beans-history.log");
+    await fs.promises.access(`./beans-history-${APP_ID}.log`);
   } catch (error) {
     let plannet = [];
-    await fs.promises.writeFile("./beans-history.log", JSON.stringify(plannet));
+    await fs.promises.writeFile(
+      `./beans-history-${APP_ID}.log`,
+      JSON.stringify(plannet)
+    );
   }
 
   try {
     let logs = JSON.parse(
-      await fs.promises.readFile("./beans-history.log", {})
+      await fs.promises.readFile(`./beans-history-${APP_ID}.log`, {})
     );
 
     for (let planet of PLANETS) {
@@ -249,7 +252,10 @@ async function addBeanLogs(time) {
       console.log(clc.blue(`========> END ADD LOG BEAN: ${planet}`));
     }
 
-    await fs.promises.writeFile("./beans-history.log", JSON.stringify(logs));
+    await fs.promises.writeFile(
+      `./beans-history-${APP_ID}.log`,
+      JSON.stringify(logs)
+    );
   } catch (err) {
     console.log(err);
   }
@@ -289,6 +295,8 @@ async function main() {
     await setup();
     console.log(clc.green("======== END REFRESH DATA EVERY 6 HOURS ========"));
   }).start();
+
+  console.log(`${APP_ID} is running.....`);
 }
 
 main();
