@@ -296,7 +296,7 @@ async function main() {
     console.log(clc.green("======== END REFRESH DATA EVERY 6 HOURS ========"));
   }).start();
 
-  console.log(`${APP_ID} is running.....`);
+  console.log(`APP_ID: ${APP_ID} is running.....`);
 }
 
 main();
