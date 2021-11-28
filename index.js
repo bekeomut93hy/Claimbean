@@ -85,6 +85,9 @@ async function farm() {
       console.log(clc.blue(`========> END planet: ${planet}`));
     }
   } catch (err) {
+    if (err && err.statusCode === 401) {
+      setup();
+    }
     console.log(err);
   }
 }
@@ -210,6 +213,9 @@ async function fight() {
       console.log(clc.blue(`========> END FIGHT planet: ${planet}`));
     }
   } catch (err) {
+    if (err && err.statusCode === 401) {
+      setup();
+    }
     console.log(err);
   }
 }
