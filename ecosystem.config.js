@@ -5,7 +5,7 @@ const LISTEN_TIMEOUT = 20000;
 module.exports = {
   apps: [
     {
-      name: "BEAN-1",
+      name: "Bean-1",
       script: "index.js",
       env: {
         BEANS_WHITELIST: "LUCKY,FLASH",
@@ -19,7 +19,7 @@ module.exports = {
       max_memory_restart: MAX_MEMORY_RESTART,
     },
     {
-      name: "traveloka-backend-2",
+      name: "Bean-2",
       script: "index.js",
       env: {
         BEANS_WHITELIST: "LUCKY,FLASH",
